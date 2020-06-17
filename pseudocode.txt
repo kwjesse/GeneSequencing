@@ -1,0 +1,149 @@
+
+
+	function unrestricted_edit_distance(seq1, seq2, m, n)
+		create an array of Nodes, m+1 by n+1
+		for i from 0 to m
+			for j from 0 to n
+				if i == 0 
+					array[i,j].edit_dist = j + indel cost
+					set previous pointer
+				else if j == 0
+					array[i,j].edit_dist = i + indel cost
+					set previous pointer
+				else if if seq1[i] == seq2[j]
+					array[i,j].edit_dist = diagonal node edit dist + match cost
+					set previous pointer
+				else
+					array[i,j].edit_dist = min (left node edit dist + indel cost,
+												top node edit dist + indel cost,
+												diagonal node edit dist + sub cost)
+					set previous pointer
+				
+				
+	function unrestricted_alignment_extraction(array, seq1, seq2, m, n)
+		create array of characters, alignment1
+		create array of characters, alignment2
+		i = m
+		j = n 
+		while i != inf or j != inf
+			if previous node is the diagonal node
+				alignment1.insert(seq1[i])
+				alignment2.insert(seq1[j])
+			else if previous node is the left node
+				alignment1.insert('-')
+				alignment2.insert(seq1[j])
+			else if previous node is the top node
+				alignment1.insert(seq1[i])
+				alignment2.insert('-')
+			set i and j to previous pointer
+		return array[m,n].edit_dist, alignment1, alignment2
+		
+		
+	function banded_edit_distance(seq1, seq2, m, n, d)
+		k = 2d+1 # bandwidth
+		create array of Nodes, n+1 by k where n is the length of the smaller sequence
+		# Front Section
+		stop = d+1
+		for i from 0 to d+1
+			for j from 0 to stop
+				calcuate_edit_distance(seq1, seq2, i, j, j)
+			stop += 1
+		# Middle Section
+		start_bigger_seq = 1
+		for i from d+1 to len(array) - k/2
+			for j from 0 to k-1
+				calculate_mid_edit_distance(seq1, seq2, i, j, start_bigger_seq+j)
+			start_bigger_seq += 1
+		# Back Section
+		start = 1
+		for i from len(array) - k/2 to len(array)
+			for j from start to k-1
+				calcuate_edit_distance(seq1, seq2, i, j, j)
+			start += 1
+	
+	
+	function banded_alignment_extraction(array, seq1, seq2, m, n)
+		create array of characters, alignment1
+		create array of characters, alignment2
+		i = m
+		j = n 
+		while i != inf or j != inf
+			if i < d+1 or i > len(array) - k/2
+				if previous node is the diagonal node
+					alignment1.insert(seq1[i])
+					alignment2.insert(seq1[j])
+				else if previous node is the left node
+					alignment1.insert('-')
+					alignment2.insert(seq1[j])
+				else if previous node is the top node
+					alignment1.insert(seq1[i])
+					alignment2.insert('-')
+				set i and j to previous pointer
+			else
+				if previous node is the diagonal node
+					alignment1.insert(seq1[i])
+					alignment2.insert(seq1[j])
+				else if previous node is the left node
+					alignment1.insert('-')
+					alignment2.insert(seq1[j])
+				else if previous node is the top node
+					alignment1.insert(seq1[i])
+					alignment2.insert('-')
+				set i and j to previous pointer
+		return array[m,n].edit_dist, alignment1, alignment2
+
+
+
+	function banded_calculate_mid_edit_distance(array, seq1, seq2, m, n, bigger_seq_j)
+		if if seq1[i] == seq2[j]
+			array[i,j].edit_dist = diagonal node edit dist + match cost
+			set previous pointer
+		else if j == 0
+			array[i,j].edit_dist = min (top node edit dist + indel cost,
+										diagonal node edit dist + sub cost)
+			set previous pointer
+		else if j == len(array[0]):
+			array[i,j].edit_dist = min (left node edit dist + indel cost,
+										diagonal node edit dist + sub cost)
+			set previous pointer
+		else
+			array[i,j].edit_dist = min (left node edit dist + indel cost,
+										top node edit dist + indel cost,
+										diagonal node edit dist + sub cost)
+			set previous pointer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			
+			
+		
